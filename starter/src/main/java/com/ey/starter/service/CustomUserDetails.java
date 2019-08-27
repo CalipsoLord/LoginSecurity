@@ -1,12 +1,14 @@
 package com.ey.starter.service;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.ey.starter.model.Role;
 import com.ey.starter.model.User;
 
 public class CustomUserDetails implements UserDetails {
@@ -19,7 +21,14 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return user.getRoles().stream().map(role-> new SimpleGrantedAuthority("ROLE_" + role)).collect(Collectors.toList());
+		
+		List<SimpleGrantedAuthority> authorities = new LinkedList<>();
+		
+		for (Role roleUser : user.getRoles()) {
+			authorities.add(new SimpleGrantedAuthority("ROLE_" + roleUser.getRoleName()));
+		}
+		
+		return authorities;
 	}
 
 	@Override
@@ -29,7 +38,6 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		// TODO ver si cambio
 		return user.getEmail();
 	}
 
@@ -53,8 +61,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
+		return user.isEnable();
 	}
 
 	public User getUser() {

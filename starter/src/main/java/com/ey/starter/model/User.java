@@ -8,9 +8,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Email;
 
 @Entity
-public class User {
+public class User extends Auditable<String>{
 	
 	@Id
 	@GeneratedValue
@@ -18,6 +19,7 @@ public class User {
 	private Integer userId;
 	
 	@Column(name="EMAIL", nullable = false, unique = true, length = 250)
+	@Email(message = "E-mail inválido")
 	private String email;
 	
 	@Column(name="PASSWORD", nullable = false)
@@ -28,6 +30,7 @@ public class User {
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Role> roles;
+	
 	
 	
 	public Integer getUserId() {

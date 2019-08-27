@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ey.starter.dto.UserDTO;
+import com.ey.starter.model.Role;
 import com.ey.starter.model.User;
 import com.ey.starter.repository.UserRepository;
 
@@ -16,7 +17,23 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public User addUser(UserDTO userDTO) {
+	public User addUser(UserDTO userDTO)  {
+		//if role different to user (2) then its invalid
+		for (Role role : userDTO.getRoles()) {
+			if (role.getRoleId() != 2) {
+				return null;
+			}
+		}
+		
+		return saveUser(userDTO);
+		
+	}
+	
+	public User addUserAdmin(UserDTO userDTO) {
+		return saveUser(userDTO);
+	}
+	
+	private User saveUser( UserDTO userDTO) {
 		
 		User user = new User();
 		user.setEmail(userDTO.getEmail());

@@ -2,26 +2,17 @@ package com.ey.starter.dto;
 
 import java.util.Set;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
 import com.ey.starter.model.Role;
 
 public class UserDTO {
 	
-	@NotEmpty(message = "Email está vazio")
-	@Email(message = "Email invalido")
 	private String email;
 	
-	@NotEmpty(message = "Password está vazio")
 	private String password;
 	
-	@NotEmpty(message = "Enable está vazio")
 	private boolean enable;
-	
-	@NotEmpty(message = "Roles está vazio")
+
 	private Set<Role> roles;
-	
 	
 
 	public String getEmail() {

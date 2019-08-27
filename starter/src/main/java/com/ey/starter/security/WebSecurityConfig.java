@@ -2,9 +2,7 @@ package com.ey.starter.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,9 +12,7 @@ import com.ey.starter.service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@EnableAutoConfiguration(exclude = { 
-		SecurityAutoConfiguration.class 
-    })
+@EnableAutoConfiguration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -25,8 +21,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests()
+		.antMatchers("/user/*").hasRole("ADMIN")
 		.antMatchers("/user").permitAll()
-		.antMatchers(HttpMethod.POST, "/login").hasRole("ADMIN")
 		.anyRequest().authenticated().and().httpBasic();
 	}
 

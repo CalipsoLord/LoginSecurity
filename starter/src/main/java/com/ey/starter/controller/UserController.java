@@ -22,16 +22,17 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value = "/login" , method = RequestMethod.POST)
-	public String login(@RequestBody UserDTO userDTO) {
-		String resp = "token" + userDTO.getEmail() + ":" + userDTO.getPassword();
-		return resp;
-	}
-	
+	/**
+	 * add user 
+	 * @param userDTO
+	 * @return
+	 */
 	@RequestMapping(value = "/user" , method = RequestMethod.POST)
 	public ResponseEntity<?> addUser(@RequestBody UserDTO userDTO) {
-		
-		User userSaved = userService.addUser(userDTO);
+		User userSaved = null;
+	
+		userSaved = userService.addUser(userDTO);			
+	
 		if (userSaved != null) {
 			return new ResponseEntity<>(HttpStatus.CREATED);			
 		}
@@ -39,6 +40,30 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 	}
 	
+	/**
+	 * add user only for admin
+	 * @param userDTO
+	 * @return
+	 */
+	@RequestMapping(value = "/user/admin" , method = RequestMethod.POST)
+	public ResponseEntity<?> addUserAdmin(@RequestBody UserDTO userDTO) {
+		User userSaved = null;
+	
+		userSaved = userService.addUserAdmin(userDTO);			
+	
+		if (userSaved != null) {
+			return new ResponseEntity<>(HttpStatus.CREATED);			
+		}
+		
+		return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	/**
+	 * logout
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value="/logout", method = RequestMethod.POST)
 	public ResponseEntity<?> logoutPage (HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -52,10 +77,20 @@ public class UserController {
 	}
 	
 	
+	
 	@RequestMapping(value = "/user" , method = RequestMethod.GET)
 	public ResponseEntity<?> user() {
 		String resp = "Todos os usuários";
 		return new ResponseEntity<>(resp,HttpStatus.OK);
 	}
+	
+	
+	
+	@RequestMapping(value = "/login" , method = RequestMethod.POST)
+	public String login(@RequestBody UserDTO userDTO) {
+		String resp = "token" + userDTO.getEmail() + ":" + userDTO.getPassword();
+		return resp;
+	}
+	
 	
 }
